@@ -48,6 +48,7 @@ class Program
             "Copyright (c) 2021-2022 Michal Strehovsky\n" +
             "https://flattened.net\n")
         {
+            RunCommand.Create(),
             BuildCommand.Create(),
             ILBuildCommand.Create(),
             InfoOption,

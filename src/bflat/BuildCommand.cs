@@ -40,7 +40,7 @@ using Internal.TypeSystem.Ecma;
 internal class BuildCommand : CommandBase
 {
     private const string DefaultSystemModule = "System.Private.CoreLib";
-    private BuildCommand() { }
+    internal BuildCommand() { }
 
     private static Option<bool> NoReflectionOption = new Option<bool>("--no-reflection", "Disable support for reflection");
     private static Option<bool> NoStackTraceDataOption = new Option<bool>("--no-stacktrace-data", "Disable support for textual stack traces");
@@ -205,13 +205,13 @@ internal class BuildCommand : CommandBase
 
         OptimizationLevel optimizationLevel = nooptimize ? OptimizationLevel.Debug : OptimizationLevel.Release;
 
-        string userSpecificedOutputFileName = result.GetValueForOption(CommonOptions.OutputOption);
+        string userSpecificedOutputFileName = global::RunCommand.RunOutputFilename ?? result.GetValueForOption(CommonOptions.OutputOption);
         string outputNameWithoutSuffix =
             userSpecificedOutputFileName != null ? Path.GetFileNameWithoutExtension(userSpecificedOutputFileName) :
             CommonOptions.GetOutputFileNameWithoutSuffix(userSpecifiedInputFiles);
 
         ILProvider ilProvider = new NativeAotILProvider();
-        bool verbose = result.GetValueForOption(CommonOptions.VerbosityOption);
+        bool verbose = global::RunCommand.RunVerboseOption ?? result.GetValueForOption(CommonOptions.VerbosityOption);
         var logger = new Logger(Console.Out, ilProvider, verbose, Array.Empty<int>(), singleWarn: false, Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>());
 
         BuildTargetType buildTargetType = result.GetValueForOption(CommonOptions.TargetOption);
